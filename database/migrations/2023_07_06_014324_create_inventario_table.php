@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('inventario', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_completo');
-            $table->integer('tipo');
-            $table->date('fecha_creacion');
-            $table->integer('estatus');
-            $table->string('password');
+            $table->string('producto');
+            $table->string('imagen');
+            $table->integer('cantidad');
+            $table->float('precio');
+            $table->integer('status');
+            $table->string('marca_modelo');
+            $table->date('fecha');
+            $table->string('Codigo_de_Barras');
             $table->timestamps();
         });
     }
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('inventario');
     }
 };

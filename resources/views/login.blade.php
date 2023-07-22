@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Startmin - Bootstrap Admin Theme</title>
+        <title>Copy Paste control</title>
 
         <!-- Bootstrap Core CSS -->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/login/bootstrap.min.css') }}"/>
@@ -38,24 +38,21 @@
                 <div class="col-md-4 col-md-offset-4">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Please Sign In</h3>
+                            <h3 class="panel-title">Incia Sesion</h3>
                         </div>
                         <div class="panel-body">
-                            <form role="form">
+                            <form  method="POST" id="formulario_accesso" action="{{ route('login') }}   ">
+                                @csrf
                                 <fieldset>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                        <input class="form-control" id="password" placeholder="text" name="nombre_completo" type="text" value=""> 
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                        <input class="form-control" id="password" placeholder="Password" name="password" type="password" value="">
                                     </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                        </label>
-                                    </div>
+                                    
                                     <!-- Change this to a button or input when using this as a form -->
-                                    <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>
+                                    <button type="submit" class="btn btn-success" id="enviar_credenciales">ENTRAR</button>
                                 </fieldset>
                             </form>
                         </div>
@@ -63,17 +60,22 @@
                 </div>
             </div>
         </div>
+    
 
         <!-- jQuery -->
-        <link rel="stylesheet" type="text/css" href="/public/js/login/query.min.js"/>
+        <script src="{{ asset('js/login/jquery.min.js') }}"></script>
+       
         <!-- Bootstrap Core JavaScript -->
-        <link rel="stylesheet" type="text/css" href="/public/js/login/bootstrap.min.js"/>
-
+        <script src="{{ asset('js/login/bootstrap.min.js') }}"></script>
+       
         <!-- Metis Menu Plugin JavaScript -->
-        <link rel="stylesheet" type="text/css" href="/public/css/login/js/metisMenu.min.js"/>
+        <script src="{{ asset('js/login/metisMenu.min.js') }}"></script>
+        
       
         <!-- Custom Theme JavaScript -->
-        <link rel="stylesheet" type="text/css" href="/public/css/login/startmin.js"/>
+        <script src="{{ asset('js/login/startmin.js') }}"></script>
+
+       <script src="{{ asset('js/login/acciones.js') }}"></script>
 
 
     </body>

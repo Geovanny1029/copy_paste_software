@@ -20,8 +20,7 @@ body {
 
 @media(min-width:768px) {
     #page-wrapper {
-        position: inherit;
-        margin-left: 250px;
+        position: inherit;  
         padding: 30px 15px 0 15px;
         border-left: 1px solid #e7e7e7;
     }

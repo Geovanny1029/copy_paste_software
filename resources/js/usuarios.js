@@ -1,65 +1,6 @@
 $( "#adduser" ).on( "click", function() {
-  
-   $("#modalUserAd").modal("show");
+   $("#modalUserAd").modal("show"); 
 } );
-
-
-import Swal from 'sweetalert2';
-window.Swal = Swal;
-
-//prueba
-// var Tableuser = null;
-
-//   if (Tableuser == null) {
-//     Tableuser = $("#usuario-table").DataTable({
-//       rowId: "id",
-//       ajax: {
-//         url: '/CargarUsuarios',
-//         type: 'GET'
-//       },
-
-//       columns: [
-//         {data : 'id'},
-//         {data : 'nombre_completo'},
-//         {data : 'login'},
-//         {data : 'tipo'},    
-//         {data : 'fecha_creacion'},
-//         {data : 'estatus'}
-
-
-//       ],
-//       language: {
-//         "sProcessing":     "Procesando...",
-//         "sLengthMenu":     "Mostrar MENU registros",
-//         "sZeroRecords":    "No se encontraron resultados",
-//         "sEmptyTable":     "Ningún dato disponible en esta tabla",
-//         "sInfo":           "Mostrando registros del START al END de un total de TOTAL registros",
-//         "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-//         "sInfoFiltered":   "(filtrado de un total de MAX registros)",
-//         "sInfoPostFix":    "",
-//         "sSearch":         "Buscar:",
-//         "sUrl":            "",
-//         "sInfoThousands":  ",",
-//         "sLoadingRecords": "Cargando...",
-//         "oPaginate": {
-//           "sFirst":    "Primero",
-//           "sLast":     "Último",
-//           "sNext":     "Siguiente",
-//           "sPrevious": "Anterior"
-//         },
-//         "oAria": {
-//           "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-//           "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-//         }
-//      },
-//       order: [[ 0, "asc" ]]
-//     })
-//   }else{
-//     refreshTableUser();
-//   }
-//prueba
-
-
 
 
 $("#GuardarUsuario").on( "click", (e) => {
@@ -73,18 +14,19 @@ $("#GuardarUsuario").on( "click", (e) => {
                 $("#GuardarUsuario").attr('disabled',true).text("Cargando...");
             },
             success : function(response){
-                Swal.fire('Usuario Guardado correctamente')
+            Swal.fire(
+                'Excelente',
+                'Proceso completado correctamente!',
+                'success'
+            );
+
                 $("#GuardarUsuario").attr('disabled',false).text("Guardar");
                 $('form').trigger("reset");
                 $("#modalUserAd").modal('hide');
                 refreshTableUser();
             },
             error: function(){
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'algo salio mal!'
-                })
+
                 $('form').trigger("reset");
                 $("#GuardarUsuario").attr('disabled',false).text("Guardar");
                 $("#modalUserAd").modal('hide');
@@ -92,3 +34,38 @@ $("#GuardarUsuario").on( "click", (e) => {
         });
  
 });
+
+
+$("#EditarUsuario").on( "click", (e) => {
+    e.preventDefault();
+    var id_user = $("#EditarUsuario").val();
+    let form  = $("#FormEditarUsuario");
+        $.ajax({
+            url     : `/copy_paste_software/public/actualizarusuario/`+id_user,
+            type    : 'POST',
+            data    : form.serialize(),
+            beforeSend : function(){
+                $("#EditarUsuario").attr('disabled',true).text("Actualizando...");
+            },
+            success : function(response){
+            Swal.fire(
+                'Excelente',
+                'Proceso completado correctamente!',
+                'success'
+            );
+                $("#EditarUsuario").attr('disabled',false).text("Guardar");
+                $('form').trigger("reset");
+                $("#modalUserEdit").modal('hide');
+                refreshTableUser();
+            },
+            error: function(){
+
+                $('form').trigger("reset");
+                $("#EditarUsuario").attr('disabled',false).text("Guardar");
+                $("#modalUserEdit").modal('hide');
+            }
+        });
+ 
+});
+
+

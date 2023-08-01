@@ -16,7 +16,7 @@ class UsuariosController extends Controller
          return view('usuarios.index');
     }
 
-        public function crear(Request $request) {
+    public function crear(Request $request) {
             $date = Carbon::now();
             $hoy =$date->format('Y-m-d');
         $user = new User();
@@ -28,19 +28,46 @@ class UsuariosController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
             return $user;
-        }
+    }
 
     public function cargarusuarios(){
-        
-     return DataTables::of(User::all())
-            ->addIndexColumn()
-            ->whitelist([
-                'id',
-                'tipo_servicio',
-                'clave_sat',
+     return DataTables::of(User::all())->make(true);
+    }
 
-            ])
-            ->rawColumns(['action'])
-            ->make(true);
+    public function desactivar(Request $request){
+        $id = $request->id;
+        $user = User::find($id);
+        $user->estatus = 2 ;
+        $user->save();
+        return true;
+    }
+
+    public function activar(Request $request){
+        $id = $request->id;
+        $user = User::find($id);
+        $user->estatus = 1;
+        $user->save();
+        return true;
+    }
+
+    public function editar(Request $request){
+        $id = $request->id;
+        $usuario = User::find($id);
+
+        return response()->json($usuario);
+
+    }
+
+
+    public function actualizar($id,Request $request) {
+            $date = Carbon::now();
+            $hoy =$date->format('Y-m-d');
+        $user = User::find($id);
+        $user->nombre_completo = $request->nombre_completo_edit;
+        $user->login = $request->login_edit;
+        $user->tipo = $request->tipo_edit;
+        //$user->password = bcrypt($request->password);
+        $user->save();
+            return $user;
     }
 }

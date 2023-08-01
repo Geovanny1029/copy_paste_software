@@ -13,14 +13,12 @@ class Inventario extends Model
     protected $fillable = [
    'id',
    'producto',
-   'imagen',
    'cantidad',
    'precio',
-   'status',
    'marca_modelo',
    'fecha',
    'Codigo_de_Barras',
-   'fecha',
+   'estatus',
    'created_at',
    'created_update',
     ];

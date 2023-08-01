@@ -22,11 +22,9 @@
     <!-- Custom Fonts -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/login/font-awesome.min.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
    
- @vite([
- '/resources/sass/app.scss', 
- '/resources/js/app.js',
- '/resources/js/usuarios.js',
+ @vite(['/resources/js/usuarios.js',
  '/resources/js/global-config.js'])
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -61,19 +59,18 @@
         </button>
 
         <ul class="nav navbar-nav navbar-left navbar-top-links">
-            <li><a href="#"><i class="fa fa-home fa-fw"></i> Home</a></li>
+            <li><a href="/copy_paste_software/public/home"><i class="fa fa-home fa-fw"></i> Home</a></li>
         </ul>
-
         <ul class="nav navbar-right navbar-top-links">
 
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> {{Auth::user()->nombre_copleto}} <b class="caret"></b>
+                    <i class="fa fa-user fa-fw"></i> {{Auth::user()->nombre_completo}} <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
                     <li class="divider"></li>
                     <li>
-                        <a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <a href="/copy_paste_software/public/ "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
             </li>
@@ -95,6 +92,7 @@
                                         <button class="btn btn-primary" id="adduser">Añadir Usuarios</button>
                                     </div>
                                 </div>
+  
                             </div>
                             <br>
                             <div class="container-fluid w-100">
@@ -104,8 +102,9 @@
                                         <th>ID</th>
                                         <th>NOMBRE</th>
                                         <th>USUARIO</th>
-                                        <th>NO.ADUANA</th>
-                                        <th>SECCION</th>
+                                        <th>TIPO</th>
+                                        <th>FECHA</th>
+                                        <th>ESTATUS</th>
                                         <th>ACCIONES</th>
                                     </tr>
                                     </thead>
@@ -125,6 +124,7 @@
 <!-- jQuery -->
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
 
 <!-- DataTables -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -138,7 +138,6 @@
 <!-- Custom Theme JavaScript -->
 <script src="{{ asset('js/login/startmin.js') }}"></script>
 <script>
-    
 $( document ).ready(function() {
     Tableuser = $("#usuarios-table").DataTable({
       rowId: "id",
@@ -151,9 +150,57 @@ $( document ).ready(function() {
         {data : 'id'},
         {data : 'nombre_completo'},
         {data : 'login'},
-        {data : 'tipo'},    
+        {
+            data       : null,
+            orderable  : false,
+            searchable : false,
+            render:function(d){
+                if(d.tipo == 1){
+                    return "ADMIN";
+                }else{
+                    return "EMPLEADO"
+                }
+            },
+            
+        },
         {data : 'fecha_creacion'},
-        {data : 'estatus'}
+        { //estatus vista
+            data       : null,
+            orderable  : false,
+            searchable : false,
+            render:function(d){
+                if(d.estatus == 1){
+                    return "ACTIVO";
+                }else{
+                    return "INACTIVO"
+                }
+            },
+            createdCell: function(td,cell,d,row,col){
+                if (d.estatus == "1") {
+                    $(td).attr('class','btn-success');
+                }else{
+                    $(td).attr('class','btn-danger');
+                }
+            }
+        },
+        {//acciones
+          data       : null,
+          searchable : false,
+          orderable  : false,
+          render : function(d){
+          var arr = {'id':d.id,'nombre':d.nombre_completo};
+          var btnedit = "";
+          if(d.estatus == 1){
+          var btnedit = "<button class='btn btn-warning btn-sm' value='1' onclick='editausuario("+JSON.stringify(arr)+")'> <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button> ";            
+            var btnactiv = "<button class='btn btn-danger btn-sm' value='1' onclick='desactivaruser("+d.id+")'> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button> ";
+          }else{
+           var btnactiv = " <button class='btn btn-success btn-sm' value='1' onclick='activaruser("+d.id+")'> <span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+          }
+
+
+            return btnedit+btnactiv;
+          }
+        }
 
 
       ],
@@ -166,7 +213,99 @@ function refreshTableUser(){
   Tableuser.ajax.reload( null, false );
 }  
 
+function desactivaruser(id){
+Swal.fire({
+  title: 'Deseas desactivar a este usuario?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Desactivar',
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    $.ajax({
+        url     : `/copy_paste_software/public/desactivar `,
+        type    : 'POST',
+        data    : {'id':id},
+        success : function(response){
+        Swal.fire(
+            'Excelente',
+            'Usuario Desactivado exitosamente!',
+            'success'
+        );
 
+            refreshTableUser();
+        },
+        error: function(){
+        Swal.fire(
+            'Error',
+            'Ha ocurrido un error revisar!',
+            'error'
+        );
+        }
+    });
+  } 
+})
+
+}
+
+function activaruser(id){
+Swal.fire({
+  title: 'Deseas activar a este usuario?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Activar',
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    $.ajax({
+        url     : `/copy_paste_software/public/activar `,
+        type    : 'POST',
+        data    : {'id':id},
+        success : function(response){
+        Swal.fire(
+            'Excelente',
+            'Usuario Activado exitosamente!',
+            'success'
+        );
+
+            refreshTableUser();
+        },
+        error: function(){
+        Swal.fire(
+            'Error',
+            'Ha ocurrido un error revisar!',
+            'error'
+        );
+        }
+    });
+  } 
+})
+}
+
+function editausuario(d){
+    var id = d.id;
+    $("#modalUserEdit").modal("show");
+    $("#EditarUsuario").val(d.id);
+   $.ajax({
+        url     : `/copy_paste_software/public/editar `,
+        type    : 'POST',
+        data    : {'id':id},
+        success : function(d){
+            $("#nombre_completo_edit").val(d.nombre_completo);
+            $("#login_edit").val(d.login);
+            $("#tipo_edit").val(d.tipo);
+
+        },
+        error: function(){
+        Swal.fire(
+            'Error',
+            'Ha ocurrido un error revisar!',
+            'error'
+        );
+        }
+    }); 
+
+}
 </script>
 </body>
 </html>

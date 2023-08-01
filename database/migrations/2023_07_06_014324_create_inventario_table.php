@@ -16,13 +16,12 @@ return new class extends Migration
         Schema::create('inventario', function (Blueprint $table) {
             $table->id();
             $table->string('producto');
-            $table->string('imagen');
             $table->integer('cantidad');
             $table->float('precio');
-            $table->integer('status');
             $table->string('marca_modelo');
             $table->date('fecha');
             $table->string('Codigo_de_Barras');
+            $table->integer('estatus');
             $table->timestamps();
         });
     }

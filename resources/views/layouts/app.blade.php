@@ -37,7 +37,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/login/font-awesome.min.css') }}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,7 +46,7 @@
         <script src="https://c
         dnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-   
+            @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
           <div id="wrapper">
@@ -65,7 +65,7 @@
                 </button>
 
                 <ul class="nav navbar-nav navbar-left navbar-top-links">
-                    <li><a href="/copy_paste_software/public/home"><i class="fa fa-home fa-fw"></i> Home</a></li>
+                    <li><a href="#"><i class="fa fa-home fa-fw"></i> Home</a></li>
                 </ul>
 
                 <ul class="nav navbar-right navbar-top-links">
@@ -78,7 +78,7 @@
 
                             <li class="divider"></li>
                             <li>
-                                <a href="/copy_paste_software/public/ "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                <a href="{{ route('logout') }}  "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -102,7 +102,7 @@
                             <div class="panel panel-primary">
 
                                 <div class="panel-heading">
-                                    <a href="/copy_paste_software/public/ventas" style="color: #f5f5f5;">
+                                    <a href="/ventas" style="color: #f5f5f5;">
                                     <div class="row">
                                         <div class="col-xs-3">
                                             <i class="fa fa-shopping-cart fa-5x"></i>
@@ -120,7 +120,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
-                                    <a href="/copy_paste_software/public/usuarios" style="color: #f5f5f5;">
+                                    <a href="" style="color: #f5f5f5;">
                                     <div class="row">
                                         <div class="col-xs-3">
                                             <i class="fa fa-users fa-5x"></i>
@@ -138,7 +138,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-yellow">
                                 <div class="panel-heading">
-                                     <a href="/copy_paste_software/public/almacen" style="color: #f5f5f5;">
+                                     <a href="" style="color: #f5f5f5;">
                                     <div class="row">
                                         <div class="col-xs-3">
                                             <i class="fa fa-archive fa-5x"></i>
@@ -155,7 +155,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-red">
                                 <div class="panel-heading">
-                                    <a href="/copy_paste_software/public/cuentas" style="color: #f5f5f5;">
+                                    <a href="" style="color: #f5f5f5;">
                                     <div class="row">
                                         <div class="col-xs-3">
                                             <i class="fa fa-line-chart fa-5x"></i>
@@ -186,15 +186,16 @@
     <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function () {
     toastr.success('¡Bienvenido/a!');
+    Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'algo salio mal!'
+                })
 });
-
-   $("#modalUserAd").modal("show");
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
-
 
         <!-- jQuery -->
-        <script src="{{ asset('js/login/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/login/query.min.js') }}"></script>
 
 
         <!-- Bootstrap Core JavaScript -->

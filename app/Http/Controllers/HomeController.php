@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,4 +25,10 @@ class HomeController extends Controller
     {
         return view('dashboard');
     }
+    public function logout()
+{
+    Auth::logout(); // Cerrar la sesión del usuario autenticado
+    return redirect('/'); // Redirigir al inicio o a donde desees después del logout
+}
+    
 }

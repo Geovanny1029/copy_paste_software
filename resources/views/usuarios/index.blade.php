@@ -59,6 +59,7 @@
         </button>
 
         <ul class="nav navbar-nav navbar-left navbar-top-links">
+            
             <li><a href="/copy_paste_software/public/home"><i class="fa fa-home fa-fw"></i> Home</a></li>
         </ul>
         <ul class="nav navbar-right navbar-top-links">
@@ -70,7 +71,7 @@
                 <ul class="dropdown-menu dropdown-user">
                     <li class="divider"></li>
                     <li>
-                        <a href="/copy_paste_software/public/ "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
             </li>

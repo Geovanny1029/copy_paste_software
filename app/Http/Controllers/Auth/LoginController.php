@@ -9,22 +9,37 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\licencias;
 
 class LoginController extends Controller
 {
 
         public function login(Request $request){
-           
-        if (Auth::attempt(array('password'=>$request->password,'login'=>$request->nombre_completo),true)){
-           
-               return redirect('/home'); 
-                
-            // }            
+        $licencia = licencias::find(1);
+        $estatus = $licencia->estatus;
+        $hoy = Carbon::now()->format('Y-m-d');
+        $vigencia = $licencia->fecha_vigencia;
+        if($estatus == 1 && ($hoy < $vigencia) ){
+           if (Auth::attempt(array('password'=>$request->password,'login'=>$request->nombre_completo),true)){
+                if(Auth::user()->tipo == 1){
+                    return redirect('/home'); 
+                }else{
+                    return redirect('/ventas'); 
+                }
+                // }            
+            }else{
+             
+                return redirect('/');
+            }
         }else{
-         
-            return redirect('/');
+             $licencia = licencias::find(1);
+                    $licencia->estatus = 0;
+                    $licencia->save();
+                return redirect('/');
         }
+ 
     }
     /*
     |--------------------------------------------------------------------------

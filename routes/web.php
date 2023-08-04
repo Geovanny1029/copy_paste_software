@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AlmacenController;
+use App\Http\Controllers\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +16,7 @@ use App\Http\Controllers\AlmacenController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-        
+Route::get('users/index', [UserController::class, 'index'])->name('users.index');
 Route::get('/', function () {
     return view('login');
 });
@@ -23,8 +25,9 @@ Route::get('/', function () {
 // Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('home');
 Auth::routes();
 
-Route::get('/home  ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/home  ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
 Route::get('/ventas',[App\Http\Controllers\VentasController::class, 'index'])->name('ventas.index');
 Route::get('/almacen',[App\Http\Controllers\AlmacenController::class, 'index'])->name('almacen.index');
@@ -58,3 +61,8 @@ Route::post('/actualizarproducto/{id}',[App\Http\Controllers\AlmacenController::
 
 //rutas ventas productos
 Route::post('/getproducto',[App\Http\Controllers\VentasController::class, 'getproducto'])->name('ventas.getproducto');
+
+
+//registrar venta
+Route::post('/registro_ventas',[App\Http\Controllers\VentasController::class, 'registro_ventas'])->name('ventas.registro');
+

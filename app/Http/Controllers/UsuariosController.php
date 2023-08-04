@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use DataTables;
-
+use Hash;
+use Session;
 class UsuariosController extends Controller
 {
     public function index(){
          return view('usuarios.index');
     }
+    
 
     public function crear(Request $request) {
             $date = Carbon::now();

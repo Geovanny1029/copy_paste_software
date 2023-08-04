@@ -86,7 +86,7 @@
 
                             <li class="divider"></li>
                             <li>
-                                <a href="/copy_paste_software/public/  "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                <a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
                         </ul>
                     </li>

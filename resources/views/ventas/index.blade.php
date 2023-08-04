@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
    
  @vite(['/resources/js/usuarios.js',
  '/resources/js/global-config.js'])
@@ -55,7 +56,9 @@
                 <span class="icon-bar"></span>
             </button>
             <ul class="nav navbar-nav navbar-left navbar-top-links">
+            @if(Auth::check() && Auth::user()->tipo == 1)
                 <li><a href="/copy_paste_software/public/home"><i class="fa fa-home fa-fw"></i> Home</a></li>
+            @endif
             </ul>
             <ul class="nav navbar-right navbar-top-links">
                 <li class="dropdown">
@@ -65,7 +68,7 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li class="divider"></li>
                         <li>
-                            <a href="/copy_paste_software/public/ "><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                 </li>
@@ -75,14 +78,14 @@
             <div id="page-wrapper">
                 <div class="container-fluid">
                     <!-- /.row -->
-                    
+                  <form  id="formventas" >
                     <div class="row">
                     <div class="col-lg-8 col-md-offset-2">
                         <div class="panel panel panel-primary">
                         <div class="panel-heading">Nueva Venta</div>
                             <div class="panel-body">
                     <div class="form-group row">
-                      <center><label for="ref" class="col-sm-12 col-form-label">Atiende:     <b>{{Auth::user()->nombre_completo}} </b></label></center>
+                      <center><label for="ref" class="col-sm-6 col-form-label">Atiende:     <b>{{Auth::user()->nombre_completo}} </b></label><div class="btn btn-success" id="lista_productos">Ver productos</div></center>
                          
                     </div>
                    
@@ -100,33 +103,49 @@
 
                         <td>                          
                             <input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo1" />
+                            <input type="hidden" class="id_producto" name="id_producto[]" id="id_producto1"> 
                         </td>
                         <td>
-                          <input type="text" name="descripcion[]" placeholder="Descripcion" class="form-control descripcion" id ="descripcion1" />
+                            <select id="select_producto1" name="id_producto[]" class="selectpicker form-control" data-live-search="true">
+                               <option value="" disabled selected>Elige una opción</option>
+                                @foreach( $productos as $key => $value )
+                                <option value="{{ $value }}">{{ $key }}</option>
+                                @endforeach
+                            </select>
+
+                          <!-- <input type="text" name="descripcion[]" placeholder="Descripcion" style=" text-transform: uppercase;" class="form-control descripcion" id ="descripcion1" /> -->
             
                         </td>
                         <td>
                           <input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad1" />
-                          
+                        <input type="hidden" class="disponibles" name="disponibles" id="disponible1">
                         </td>
                         <td>
                           <input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio1" readonly />
                         </td>
                         <td>
                          <div id="total_unidad1"></div>
-                         <input type="hidden" class="total_unidad" name="total_precio_unidad1" id="total_precio_unidad1">                                                                        
+                         <input type="hidden" class="total_unidad" name="total_precio_unidad1" id="total_precio_unidad1">                                                                   
                         <td>
                           <button type="button" name="addc" id="addc" class="btn btn-success">+</button>
                         </td>
                       </tr>
                     </table>
                     <table class="table table-hover">
+                     <tbody>
                       <tr>
-                        <td></td><td></td><td></td><td></td><td></td><td><h4>Total:</h4></td><td><h4><div id="totalconceptos"></div></h4></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td align="text-center" ><h3><div id="totalconceptos"></div></h3><div class="btn btn-success" id="registrar_venta">REGISTRAR</div><input type="hidden"     name="totalconceptos_hidden" id="totalconceptos_hidden">  </td>
                       </tr>
+                     </tbody>
                     </table>
-
-                  </div>                               
+                </form>
+                  </div>   
+                  @include('ventas.modal_lista_productos')                            
                             </div>
                         </div>
                     </div>
@@ -151,78 +170,139 @@
 <script src="{{ asset('js/login/metisMenu.min.js') }}"></script>
 <!-- Morris Charts JavaScript -->
 <script src="{{ asset('js/login/raphael.min.js') }}"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script type="text/javascript">
         $(".codigo").last().focus();
          var l = 1;
-              $(document).on('change', '.codigo', function(){
-               
-                console.log(l);
+            $(document).on('change', '.codigo', function(){
+    $("id_producto1").selectpicker();   
                 // Obtener el valor del código de barras escaneado
                 var dato = $(this).val();
+                $.ajax({
+                    url  : '/copy_paste_software/public/getproducto',
+                    type : 'POST',
+                    data : {'id':dato},
+                    success    : function(r){
+                        //si es false es porque no existe el codigo del producto
+                        if(r != false){
+                            //si cantidad es 0 es porque no existen unidades disponibles
+                            if(r.cantidad == 0){
+                                Swal.fire(
+                                'El producto ya no esta disponible',
+                                'Revisar',
+                                'error'
+                                );
+                                $("#codigo"+l).val("");
+                            }else{
 
-                  $.ajax({
-                      url  : '/copy_paste_software/public/getproducto',
-                          type : 'POST',
-                          data : {'id':dato},
-                          success    : function(r){
-                            if(r != false){
-                                $("#descripcion"+l).val(r.producto);
+                                $("#select_producto"+l).val(r.id);
+                                $("#select_producto"+l).selectpicker('refresh');
                                 $("#cantidad"+l).val(1);
                                 $("#precio"+l).html("<h4>$"+r.precio+"</h4>");
                                 $("#precio"+l).val(r.precio    );
                                 $("#total_unidad"+l).html("<h4>$ "+r.precio+"</h4>");
                                 $("#total_precio_unidad"+l).val(r.precio);
+                                $("#disponible"+l).val(r.cantidad);
+                                $("#id_producto"+l).val(r.id);
                                 l++
                              $('#tabla_conceptos').append(
                                     '<tr id="row'+l+'" class="agregado">'+
                                     '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
+                                        '<input type="hidden" class="id_producto" name="id_producto[]" id="id_producto'+l+'">'+
                                     '<td> <input type="text" name="descripcion[]" placeholder="Descripcion" class="form-control descripcion" id ="descripcion'+l+'" /></td>'+
                                     '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
+                                    '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
                                     '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
                                     '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
-                                    '<td><button type="button" name="removec" id="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
+                                    '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
                                     );
-                             $(".codigo").last().focus();
-                             //suma de los conceptos
+                                 $(".codigo").last().focus();
+                                //suma de los conceptos
                                 var suma = 0;
 
                                 $(".total_unidad").each(function() {
-                                    var valorNumerico = parseFloat($(this).val());
-                                    console.log(valorNumerico);
+                                    var valorNumerico = parseFloat($(this).val()); 
                                     if (!isNaN(valorNumerico)) {
                                         suma += valorNumerico;
                                     }
                                 });
-                                $("#totalconceptos").html("<h3>$ "+suma+"</h3>");
-                            }else{
-                                Swal.fire(
-                                    'Error',
-                                    'No se encontro el producto',
-                                    'error'
-                                );
-                                $("#codigo"+l).val("");
+                                $("#totalconceptos").html("<b>Total: $ "+suma+"</b>");
+                               $("#totalconceptos_hidden").val(suma);
                             }
+                        }else{
+                            Swal.fire(
+                                'No se encontro el producto',
+                                'Revisar',
+                                'error'
+                            );
+                            $("#codigo"+l).val("");
+                        }
+                    }
+                });
+            });
 
-
-                      }
-                  });
-              });
-
-               $(document).on('change', '.cantidad', function(){
+    $(document).on('change', '.cantidad', function(){
                     var palabra = $(this).attr("id");
+                    //ultima letra se refiere al numero de la r
                     var ultimaLetra = palabra.charAt(palabra.length - 1);
-                    
                     var cantidad = $(this).val();
-                    var precio = $("#precio"+ultimaLetra).val();
-                    var total = precio*cantidad;
-                    $("#total_unidad"+ultimaLetra).html("<h4>$ "+total+"</h4>");
-                    $("#total_precio_unidad"+ultimaLetra).val(total);
+                    var disponibilidad = $("#disponible"+ultimaLetra).val();
+                    if(cantidad< disponibilidad){
+                        var precio = $("#precio"+ultimaLetra).val();
+                        var total = precio*cantidad;
+                        $("#total_unidad"+ultimaLetra).html("<h4>$ "+total+"</h4>");
+                        $("#total_precio_unidad"+ultimaLetra).val(total);
 
-                    var suma = 0;
+                        var suma = 0;
+
+                        $(".total_unidad").each(function() {
+                            var valorNumerico = parseFloat($(this).val());
+                            console.log(valorNumerico);
+                            if (!isNaN(valorNumerico)) {
+                                suma += valorNumerico;
+                            }
+                        });
+                        $("#totalconceptos").html("<b>Total: $ "+suma+"</b>");
+                        $("#totalconceptos_hidden").val(suma);
+                    }else{
+                        Swal.fire(
+                            ' unidades disponiles: '+disponibilidad  ,
+                            'No existen muchas unidades',
+                            'error'
+                        );
+                         var cantidad_dis = $(this).val(disponibilidad);
+                         var cantidad = $("#cantidad"+ultimaLetra).val();
+                        var precio = $("#precio"+ultimaLetra).val();
+                        var total = precio*cantidad;
+                        console.log(cantidad);
+                        $("#total_unidad"+ultimaLetra).html("<h4>$ "+total+"</h4>");
+                        $("#total_precio_unidad"+ultimaLetra).val(total);
+
+                        var suma = 0;
+
+                        $(".total_unidad").each(function() {
+                            var valorNumerico = parseFloat($(this).val());
+                            console.log(valorNumerico);
+                            if (!isNaN(valorNumerico)) {
+                                suma += valorNumerico;
+                            }
+                        });
+                        $("#totalconceptos").html("<b>Total: $ "+suma+"</b>");
+                        $("#totalconceptos_hidden").val(suma);
+                    }
+    });
+
+
+    $(document).on('click', '.btn_remove', function(){
+            event.preventDefault();
+            var opcion = confirm("Deseas eliminar este registro?");
+            if (opcion == true) {
+                var id = $(this).val();
+                $('#row'+id+'').remove();
+                var suma = 0;
 
                     $(".total_unidad").each(function() {
                         var valorNumerico = parseFloat($(this).val());
@@ -231,10 +311,103 @@
                             suma += valorNumerico;
                         }
                     });
-                    $("#totalconceptos").html("<h3>$ "+suma+"</h3>");
+                    $("#totalconceptos").html("<b>Total: $ "+suma+"</b>");
+                    $("#totalconceptos_hidden").val(suma);
+            } 
 
-               });
-         
+    });
+    //agregar otro item
+    $("#addc").click(function(){
+        l++
+        $('#tabla_conceptos').append(
+            '<tr id="row'+l+'" class="agregado">'+
+            '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
+            '<td> <input type="text" name="descripcion[]" placeholder="Descripcion" class="form-control descripcion" id ="descripcion'+l+'" /></td>'+
+            '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
+            '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
+             '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
+            '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
+        );
+         $(".codigo").last().focus();
+    });
+        
+$("#lista_productos" ).on( "click", function() {
+        event.preventDefault();
+    Tablaproductos = $("#lista-table-productos").DataTable({
+      rowId: "id",
+      ajax: {
+        url: '/copy_paste_software/public/CargarAlmacen',
+        type: 'GET'
+      },
+
+      columns: [
+    { data: 'id' },
+    { data: 'producto' },
+    { data: 'cantidad' },
+    { data: 'precio' },
+    { //estatus vista
+            data       : null,
+            orderable  : false,
+            searchable : false,
+            render:function(d){
+                if(d.cantidad >= 8 || d.cantidad >=10){
+                    return "EN EXISTENCIAS"
+                } else if (d.cantidad >=1 && d.cantidad <= 7) {
+                    return "POCAS EXISTENCIAS"
+                }else{
+                    return "NO DISPONIBLE"
+                }
+            },
+            createdCell: function(td,cell,d,row,col){
+                if(d.cantidad >= 8 || d.cantidad >=10){
+                    $(td).attr('class','btn-success');
+                } else if (d.cantidad >=1 && d.cantidad <= 7) {
+                    $(td).attr('class','btn-warning');
+                }else{
+                    $(td).attr('class','btn-danger');
+                }
+                }
+    },
+        
+    { data: 'marca_modelo' },
+    { data: 'Codigo_de_Barras' },
+   
+],
+      order: [[ 0, "asc" ]]
+    })
+   $("#modalListaProducto").modal("show"); 
+} );
+                   
+$("#registrar_venta").on( "click", (e) => {
+    event.preventDefault();
+    let form  = $("#formventas");
+        $.ajax({
+            url     : `/copy_paste_software/public/registro_ventas `,
+            type    : 'POST',
+            data    : form.serialize(),
+            beforeSend : function(){
+                $("#registrar_venta").attr('disabled',true).text("Cargando...");
+            },
+            success : function(response){
+            Swal.fire(
+                'Excelente',
+                'Venta completada correctamente!',
+                'success'
+            );
+
+                $("#registrar_venta").attr('disabled',false).text("Registrar");
+                $('form').trigger("reset");
+               //  window.location.href = '/copy_paste_software/public/ventas';
+            },
+            error: function(){
+
+                $('form').trigger("reset");
+                $("#GuardarUsuario").attr('disabled',false).text("Guardar");
+                $("#modalUserAd").modal('hide');
+            }
+        });
+ 
+});
     </script>
 </body>
 </html>

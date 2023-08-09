@@ -5,6 +5,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CotizacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
 Route::get('/ventas',[App\Http\Controllers\VentasController::class, 'index'])->name('ventas.index');
 Route::get('/almacen',[App\Http\Controllers\AlmacenController::class, 'index'])->name('almacen.index');
+Route::get('/cotizaciones',[App\Http\Controllers\CotizacionesController::class, 'index'])->name('cotizaciones.index');
 
 
 ////rutas modulo usuario
@@ -62,7 +64,12 @@ Route::post('/actualizarproducto/{id}',[App\Http\Controllers\AlmacenController::
 //rutas ventas productos
 Route::post('/getproducto',[App\Http\Controllers\VentasController::class, 'getproducto'])->name('ventas.getproducto');
 
+Route::post('/getproducto_select',[App\Http\Controllers\VentasController::class, 'getproducto_select'])->name('ventas.getproducto');
+
 
 //registrar venta
 Route::post('/registro_ventas',[App\Http\Controllers\VentasController::class, 'registro_ventas'])->name('ventas.registro');
-
+Route::post('/cierre_ventas',[App\Http\Controllers\VentasController::class, 'cierre_ventas'])->name('ventas.cierre');
+Route::post('/registrar_cierre_ventas',[App\Http\Controllers\VentasController::class, 'registrar_cierre_ventas'])->name('ventas.cierre');
+///REGISTRAR COTIZACIONES
+Route::post('/registro_cotizacion',[App\Http\Controllers\CotizacionesController::class, 'registro_cotizacion'])->name('cotizacion.registro');

@@ -196,7 +196,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //excel
-        
+        Barryvdh\DomPDF\ServiceProvider::class,        
         
 
     ],

@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('venta', function (Blueprint $table) {
+        Schema::create('cotizacion', function (Blueprint $table) {
             $table->id();
             $table->integer('id_usuario');
-            $table->date('fecha_de_venta');
+            $table->string('nombre_cotizacion');
+            $table->date('fecha_de_cotizacion');
             $table->integer('total');
-            $table->integer('status');
+            $table->integer('estatus');
             $table->timestamps();
         });
     }
@@ -30,8 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventario');
+        Schema::dropIfExists('cotizacion');
     }
 };
-
-

@@ -20,7 +20,7 @@ class Users extends Seeder
             'tipo'  => 1,
             'fecha_creacion' => Carbon::now()->format('Y-m-d'),
             'estatus'  => 1,
-            'password'  => bcrypt('123tamarindo'),
+            'password'  => bcrypt('123'),
         ]);
     }
 }

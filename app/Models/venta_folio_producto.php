@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VentaFolioProducto extends Model
+class venta_folio_producto extends Model
 {
-  use HasFactory;
+    use HasFactory;
     protected $table = 'venta_folio_producto';
 
     protected $fillable = [
@@ -16,7 +16,6 @@ class VentaFolioProducto extends Model
    'id_producto',
    'cantidad',
    'precio',
-    ];
+];
 
-    public $timestamps = false;
 }

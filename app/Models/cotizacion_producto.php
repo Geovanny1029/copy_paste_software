@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cierre_ventas extends Model
+class cotizacion_producto extends Model
 {
     use HasFactory;
-    protected $table = 'cierre_ventas';
+    protected $table = 'cotizacion_producto';
 
     protected $fillable = [
    'id',
-   'id_usuario',
-   'total',
-   'fecha_cierre',
-   'created_at',
-   'created_update',
+   'folio_cotizacion',
+   'id_producto',
+   'cantidad',
+   'precio',
     ];
 }
-

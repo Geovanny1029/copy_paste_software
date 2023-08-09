@@ -118,6 +118,24 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
+                        <div class="panel" style="background-color: #8A2BE2; color: #f5f5f5;">
+                                <div class="panel-heading">
+                                    <a href="/copy_paste_software/public/cotizaciones" style="color: #f5f5f5;">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-users fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <div class="huge">Cotizaciones</div>
+                                            <div>PEDIDOS ESPECIALES</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <a href="/copy_paste_software/public/usuarios" style="color: #f5f5f5;">

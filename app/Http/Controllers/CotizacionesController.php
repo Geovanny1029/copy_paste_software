@@ -8,12 +8,23 @@ use Carbon\Carbon;
 use App\Models\cotizacion;
 use App\Models\cotizacion_producto;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionesController extends Controller
 {
     public function index(){
         $productos = Inventario::pluck('id','producto');
          return view('cotizaciones.index')->with('productos',$productos);
+    }
+
+    public function pdf($id, Request $request){
+        $data = []; // Puedes pasar datos a la vista si es necesario
+    $folio = cotizacion::find($id);
+    $productos = cotizacion_producto::where('folio_cotizacion',$folio->id)->get();
+    dd($folio);
+    //$pdf = PDF::loadView('cotizacion.pdf', $data)
+
+   return   PDF::loadView('cotizacion.pdf', $data)->stream('archivo.pdf');
     }
 
 
@@ -49,13 +60,13 @@ class CotizacionesController extends Controller
         $nueva_cotizacion->save();
 
         $total_productos = sizeof($request->codigo);
-        $id_cotizacion = $request->id_producto;
+        $id_producto = $request->id_producto;
         $cantidad = $request->cantidad;
         $precio = $request->precio;
 
         for ($i=0; $i < $total_productos; $i++){
             $item_cotizacion = new cotizacion_producto();
-            $item_cotizacion ->folio_cotizacion = $nueva_cotizacion->id;
+            $item_cotizacion->folio_cotizacion = $nueva_cotizacion->id;
             $item_cotizacion->id_producto = $id_producto[$i];
             $item_cotizacion->cantidad = $cantidad[$i];
             $item_cotizacion->precio = $precio[$i];

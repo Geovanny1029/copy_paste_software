@@ -46,7 +46,7 @@
         <script src="https://c
         dnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-            @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+         @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/usuarios.js','resources/js/global-config.js'])
     <style>
         body {
             padding-top: 50px; /* Agrega suficiente espacio para el navbar */

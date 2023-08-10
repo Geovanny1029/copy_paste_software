@@ -30,8 +30,7 @@
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
 
-    @vite(['/resources/js/usuarios.js',
-    '/resources/js/global-config.js'])
+     @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/usuarios.js','resources/js/global-config.js'])
 
     <style>
         body {

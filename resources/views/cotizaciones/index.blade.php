@@ -30,8 +30,7 @@
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
    
- @vite(['/resources/js/usuarios.js',
- '/resources/js/global-config.js'])
+ @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/usuarios.js','resources/js/global-config.js'])
 
     <style>
         body {
@@ -394,72 +393,62 @@ $("#lista_productos" ).on( "click", function() {
                    
 $("#registrar_cotizacion").on( "click", (e) => {
     event.preventDefault();
-    var camposCodigo = [];
-    var camposProducto = [];
-    var camposCantidad = [];
 
-    $('.codigo').each(function() {
-        if ($(this).val() === '') {
-            camposCodigo.push($(this)); // Agregar campo vacío al array
-        }
-    });   
-
-    $('.select_producto').each(function() {
-        if ($(this).val() === '') {
-            camposProducto.push($(this)); // Agregar campo vacío al array
-        }
-    });   
-
-    $('.cantidad').each(function() {
-        if ($(this).val() === '') {
-            camposCantidad.push($(this)); // Agregar campo vacío al array
-        }
+ 
+   var campocodigo= $(".codigo").filter(function() {
+     return $(this).val().trim() === ""; // Filtra los campos vacíos
+    });
+    var camponombre= $(".nombre_cotizacion").filter(function() {
+     return $(this).val().trim() === ""; // Filtra los campos vacíos
     });
 
+var campocantidad= $(".cantidad").filter(function() {
+   return $(this).val().trim() === ""; // Filtra los campos vacíos
+ });
 
-    let form  = $("#formcotizacion");
-        $.ajax({
-            url     : `/copy_paste_software/public/registro_cotizacion `,
-            type    : 'POST',
-            data    : form.serialize(),
-            beforeSend : function(){
-                $("#registrar_cotizacion").attr('disabled',true).text("Cargando...");
+
+ if(campocodigo.length>0 || campocantidad.length>0 || camponombre.length>0){
+     alert("Falta llenar datos revisar");
+ }else{
+
+    let form = $("#formcotizacion");
+$.ajax({
+    url: `/copy_paste_software/public/registro_cotizacion`,
+    type: 'POST',
+    data: form.serialize(),
+    beforeSend: function () {
+        $("#registrar_cotizacion").attr('disabled', true).text("Cargando...");
+    },
+    success: function (datos) {
+        var total_venta = $("#totalconceptos_hidden").val();
+        Swal.fire({
+            title: 'DESEAS FINALIZAR COTIZACION',
+            inputAttributes: {
+                autocapitalize: 'off'
             },
-            success : function(datos){
-                var total_venta = $("#totalconceptos_hidden").val();
+            showCancelButton: true,
+            confirmButtonText: 'FINALIZAR',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
                 Swal.fire({
-                  title: '<h2>Folio: '+datos.id+'<br><b> Total Venta: $'+total_venta+'</b></h2><br>Introduce pago',
-                  input: 'text',
-                  inputAttributes: {
-                    autocapitalize: 'off'
-                  },
-                  showCancelButton: true,
-                  confirmButtonText: 'Cambio',
-                  showLoaderOnConfirm: true,
-                  preConfirm: (pago) => {
-                    var cambio = pago - total_venta;
-                    return cambio;
-                  },
-                  allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    Swal.fire({
-                      title: `<h2><b>cambio:$${result.value}</b></h2>`
-                    })
-                    setTimeout(function() {
-            location.reload();
-        }, 5000); // 5000 milisegundos = 5 segundos
-                  }
-                })
-            },
-            error: function(){
-
-                $('form').trigger("reset");
-                $("#GuardarUsuario").attr('disabled',false).text("Guardar");
-                $("#modalUserAd").modal('hide');
+                    title: `GUARDADO`
+                });
+                // Abrir el PDF en una nueva ventana o pestaña
+                window.open('/copy_paste_software/public/pdf/'+1, "_blank");
             }
         });
+    },
+    error: function () {
+        $('form').trigger("reset");
+        $("#GuardarUsuario").attr('disabled', false).text("Guardar");
+        $("#modalUserAd").modal('hide');
+    }
+});
+
   
+};
 });
 
 $(document).on('change', '.select_producto', function(){ 

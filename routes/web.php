@@ -7,6 +7,7 @@ use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CotizacionesController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,4 +74,4 @@ Route::post('/cierre_ventas',[App\Http\Controllers\VentasController::class, 'cie
 Route::post('/registrar_cierre_ventas',[App\Http\Controllers\VentasController::class, 'registrar_cierre_ventas'])->name('ventas.cierre');
 ///REGISTRAR COTIZACIONES
 Route::post('/registro_cotizacion',[App\Http\Controllers\CotizacionesController::class, 'registro_cotizacion'])->name('cotizacion.registro');
-Route::post('/pdf/{id}',[App\Http\Controllers\CotizacionesController::class, 'pdf'])->name('cotizacion.pdf');
+Route::get('/pdf2/{id}',[App\Http\Controllers\CotizacionesController::class, 'pdf'])->name('cotizacion.pdf');

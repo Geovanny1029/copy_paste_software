@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('producto');
             $table->integer('cantidad');
             $table->float('precio');
+            $table->float('precio_compra');
             $table->string('marca_modelo');
             $table->date('fecha');
             $table->string('Codigo_de_Barras');

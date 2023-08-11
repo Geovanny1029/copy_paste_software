@@ -97,7 +97,7 @@
                     </div>
                     <!-- /.row -->
                     <div class="row">
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-6" style="width:30%">
                             
                             <div class="panel panel-primary">
 
@@ -117,7 +117,7 @@
 
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-6" style="width:30%">
                         <div class="panel" style="background-color: #8A2BE2; color: #f5f5f5;">
                                 <div class="panel-heading">
                                     <a href="/copy_paste_software/public/cotizaciones" style="color: #f5f5f5;">
@@ -135,7 +135,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-6" style="width:30%">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <a href="/copy_paste_software/public/usuarios" style="color: #f5f5f5;">
@@ -153,7 +153,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-6" style="width:30%">
                             <div class="panel panel-yellow">
                                 <div class="panel-heading">
                                      <a href="/copy_paste_software/public/almacen" style="color: #f5f5f5;">
@@ -170,7 +170,7 @@
                                     </a>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-6" style="width:30%">
                             <div class="panel panel-red">
                                 <div class="panel-heading">
                                     <a href="/copy_paste_software/public/cuentas" style="color: #f5f5f5;">

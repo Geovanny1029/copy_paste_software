@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF COTIZACION</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>COTIZACIONES COPY & PASTE</h1>
+    PERSONA A COTIZAR: {{$folio->nombre_cotizacion}}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>FOLIO</th>
+                <th>PRODUCTO</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($cotizacionProductos as $producto)
+                <tr>
+                    <td>{{ $producto->id }}</td>
+                    <td>{{ $producto->folio_cotizacion }}</td>
+                    <td>{{ $producto->producto }}</td>
+                    <td>{{ $producto->cantidad }}</td>
+                    <td>{{ $producto->precio }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</body>
+</html>

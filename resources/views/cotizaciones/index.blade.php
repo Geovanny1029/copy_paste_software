@@ -119,7 +119,7 @@
                                         @endforeach
                         </select>
 
-                          <!-- <input type="text" name="descripcion[]" placeholder="Descripcion" style=" text-transform: uppercase;" class="form-control descripcion" id ="descripcion1" /> -->
+                        <input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden1">
             
                         </td>
                         <td>
@@ -219,12 +219,13 @@
                                 $("#total_precio_unidad"+l).val(producto.precio);
                                 $("#disponible"+l).val(producto.cantidad);
                                 $("#id_producto"+l).val(producto.id);
+                                $("#select_producto_hiden"+l).val(producto.id);
                                 l++
 
                              $('#tabla_conceptos').append(
                                     '<tr id="row'+l+'" class="agregado">'+
                                     '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                                    '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
+                                    '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
                                     '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
                                     '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
                                     '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
@@ -313,7 +314,7 @@
         $('#tabla_conceptos').append(
             '<tr id="row'+l+'" class="agregado">'+
             '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-            '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
+            '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
             '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
             '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
              '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
@@ -436,7 +437,7 @@ $.ajax({
                     title: `GUARDADO`
                 });
                 // Abrir el PDF en una nueva ventana o pestaña
-                window.open('/copy_paste_software/public/pdf/'+1, "_blank");
+                window.open('/copy_paste_software/public/pdf2/'+datos.id, "_blank");
             }
         });
     },
@@ -480,12 +481,13 @@ $(document).on('change', '.select_producto', function(){
                         $("#total_precio_unidad"+l).val(producto.precio);
                         $("#disponible"+l).val(producto.cantidad);
                         $("#id_producto"+l).val(producto.id);
+                         $("#select_producto_hiden"+l).val(producto.id);
                         l++
 
                         $('#tabla_conceptos').append(
                         '<tr id="row'+l+'" class="agregado">'+
                         '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                        '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
+                        '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
                         '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
                         '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
                         '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+

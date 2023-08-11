@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Inventario;
 use Carbon\Carbon;
 use App\Models\cotizacion;
+use App\Models\Vistas;
 use App\Models\cotizacion_producto;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,13 +19,12 @@ class CotizacionesController extends Controller
     }
 
     public function pdf($id, Request $request){
-        $data = []; // Puedes pasar datos a la vista si es necesario
+       
     $folio = cotizacion::find($id);
-    $productos = cotizacion_producto::where('folio_cotizacion',$folio->id)->get();
-    dd($folio);
+    $cotizacionProductos = Vistas::where('folio_cotizacion',$folio->id)->get();
     //$pdf = PDF::loadView('cotizacion.pdf', $data)
 
-   return   PDF::loadView('cotizacion.pdf', $data)->stream('archivo.pdf');
+   return  PDF::loadView('cotizaciones.pdf', ['cotizacionProductos'=>$cotizacionProductos,'folio'=>$folio])->stream('archivo.pdf');
     }
 
 
@@ -60,7 +60,7 @@ class CotizacionesController extends Controller
         $nueva_cotizacion->save();
 
         $total_productos = sizeof($request->codigo);
-        $id_producto = $request->id_producto;
+        $id_producto = $request->select_producto_hiden;
         $cantidad = $request->cantidad;
         $precio = $request->precio;
 

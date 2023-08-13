@@ -32,6 +32,12 @@ class VentasController extends Controller
         } 
     }
 
+
+    public function getproductos(){
+        $productos = Inventario::all();
+         return response()->json(['productos'=>$productos]);
+
+    }
     public function getproducto_select(Request $request){
           $id = $request->id;
         $producto = Inventario::where('id',$id)->first();

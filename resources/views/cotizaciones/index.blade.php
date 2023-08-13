@@ -27,6 +27,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/login/font-awesome.min.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/lity@2.4.1/dist/lity.min.css ">
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
    
@@ -76,82 +78,112 @@
         </nav>
             <div id="page-wrapper">
                 <div class="container-fluid">
-                    <!-- /.row -->
-                  <form  id="formcotizacion" >
-                    <div class="row">
-                    <div class="col-lg-8 col-md-offset-2">
-                        <div class="panel panel panel-primary">
-                        <div class="panel-heading">Nueva Venta</div>
-                            <div class="panel-body">
-                    <div class="form-group row">
-                      <center><label for="ref" class="col-sm-6 col-form-label">Atiende:     <b>{{Auth::user()->nombre_completo}} </b></label><div class="btn btn-success" id="lista_productos">Ver productos</div></center>
-                         
-                    </div>
-                   
-                  <div class="form-row">
-                    <table class="table table-hover" id="datos">
-                    <td>   
-                    <label for="message-text" class="col-form-label">Nombre a la persona a cotizar:</label>                       
-                        <input type="text" name="nombre_cotizacion" style=" text-transform: uppercase;" placeholder="NombreCotizacion" class="form-control nombre_cotizacion" id ="nombre_cotizacion" />
-                            
-                        </td>
-                    </table>
-                    <table class="table table-hover" id="tabla_conceptos">
-                      <tr>
-                        <th>Codigo</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Total</th>
-                        <th>Agregar</th>
-                    </tr>
-                      <tr id="row1">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#nuevacotizacionTab">NUEVA COTIZACION</a></li>
+                        <li><a data-toggle="tab" id="table_cotizaciones_activas" href="#cotizaciones_activas">COTIZACIONES ACTIVAS</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="nuevacotizacionTab" class="tab-pane fade in active">
+                            <!-- /inicio de container -->
+                            <form  id="formcotizacion" >
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-offset-2">
+                                        <div class="panel panel panel-primary">
+                                            <div class="panel-heading">Nueva Venta</div>
+                                            <div class="panel-body">
+                                                <div class="form-group row">
+                                                  <center><label for="ref" class="col-sm-6 col-form-label">Atiende:     <b>{{Auth::user()->nombre_completo}} </b></label><div class="btn btn-success" id="lista_productos">Ver productos</div></center>   
+                                                </div>
+                           
+                                                <div class="form-row">
+                                                    <table class="table table-hover" id="datos">
+                                                        <td>   
+                                                            <label for="message-text" class="col-form-label">Nombre a la persona a cotizar:</label>                       
+                                                            <input type="text" name="nombre_cotizacion" style=" text-transform: uppercase;" placeholder="NombreCotizacion" class="form-control nombre_cotizacion" id ="nombre_cotizacion" />
+                                                        </td>
+                                                    </table>
+                                                </div>
+                                                <table class="table table-hover" id="tabla_conceptos">
+                                                  <tr>
+                                                    <th>Codigo</th>
+                                                    <th>Producto</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Precio</th>
+                                                    <th>Total</th>
+                                                    <th>Agregar</th>
+                                                </tr>
+                                                  <tr id="row1">
 
-                        <td>                          
-                            <input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo1" />
-                            <input type="hidden" class="id_producto" name="id_producto[]" id="id_producto1"> 
-                        </td>
-                        <td>
-                        <select id="select_producto1" name="id_producto[]" class="selectpicker form-control select_producto" data-live-search="true">
-                                <option value="" disabled selected>Elige una opción</option>
-                                    @foreach( $productos as $key => $value )
-                                     <option value="{{ $value }}">{{ $key }}</option>
-                                        @endforeach
-                        </select>
+                                                    <td>                          
+                                                        <input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo1" />
+                                                        <input type="hidden" class="id_producto" name="id_producto[]" id="id_producto1"> 
+                                                    </td>
+                                                    <td>
+                                                    <select id="select_producto1" name="id_producto[]" class="selectpicker form-control select_producto" data-live-search="true">
+                                                            <option value="" disabled selected>Elige una opción</option>
+                                                                @foreach( $productos as $key => $value )
+                                                                 <option value="{{ $value }}">{{ $key }}</option>
+                                                                    @endforeach
+                                                    </select>
 
-                        <input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden1">
-            
-                        </td>
-                        <td>
-                          <input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad1" />
-                        <input type="hidden" class="disponibles" name="disponibles" id="disponible1">
-                        </td>
-                        <td>
-                          <input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio1" readonly />
-                        </td>
-                        <td>
-                         <div id="total_unidad1"></div>
-                         <input type="hidden" class="total_unidad" name="total_precio_unidad" id="total_precio_unidad1">                                                                   
-                        <td>
-                          <button type="button" name="addcoti" id="addcoti" class="btn btn-success">+</button>
-                        </td>
-                      </tr>
-                    </table>
-                    <table class="table table-hover">
-                     <tbody>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="text-center" ><h3><div id="totalconceptos"></div></h3><div class="btn btn-success" id="registrar_cotizacion">REGISTRAR</div><input type="hidden"     name="totalconceptos_hidden" id="totalconceptos_hidden">  </td>
-                      </tr>
-                     </tbody>
-                    </table>
-                </form>
-                  </div>   
-                  @include('ventas.modal_lista_productos')                            
+                                                    <input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden1">
+                                        
+                                                    </td>
+                                                    <td>
+                                                      <input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad1" />
+                                                    <input type="hidden" class="disponibles" name="disponibles" id="disponible1">
+                                                    </td>
+                                                    <td>
+                                                      <input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio1" readonly />
+                                                    </td>
+                                                    <td>
+                                                     <div id="total_unidad1"></div>
+                                                     <input type="hidden" class="total_unidad" name="total_precio_unidad" id="total_precio_unidad1">                                                                   
+                                                    <td>
+                                                      <button type="button" name="addcoti" id="addcoti" class="btn btn-success">+</button>
+                                                    </td>
+                                                  </tr>
+                                                </table>
+                                                <table class="table table-hover">
+                                                 <tbody>
+                                                  <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td align="text-center" ><h3><div id="totalconceptos"></div></h3><div class="btn btn-success" id="registrar_cotizacion">REGISTRAR</div><input type="hidden"     name="totalconceptos_hidden" id="totalconceptos_hidden">  </td>
+                                                  </tr>
+                                                 </tbody>
+                                                </table>
+                                            </div>    
+                                        </div>        
+                                    </div>            
+                                </div>                
+                            </form>
+                             @include('ventas.modal_lista_productos')  
+                        </div>    
+                        <div id="cotizaciones_activas" class="tab-pane fade">
+                        <h3>COTIZACIONES ACTIVAS</h3>
+                            <div class="row">
+                                <div class="container-fluid w-100">
+                                 <table class="table table-striped nowrap table-responsive" style="width:100%" id="cotizaciones-table">
+                                    <thead>
+                                    <tr>
+                                        <th>FOLIO COTIZACION</th>
+                                        <th>NOMBRE COTIZACION</th>
+                                        <th>FECHA DE COTIZACION</th>
+                                        <th>ACCIONES</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            </div><br>
+                        </div>
+                    </div>                         
+                </div>  
+                <!-- termina el container  -->
+                                           
                             </div>
                         </div>
                     </div>
@@ -177,10 +209,128 @@
 <!-- Morris Charts JavaScript -->
 <script src="{{ asset('js/login/raphael.min.js') }}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lity@2.4.1/dist/lity.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script type="text/javascript">
+let Tablecotizacion = null;        
+$("#table_cotizaciones_activas").on( "click", function() {
+    if(Tablecotizacion == null){
+
+    Tablecotizacion = $("#cotizaciones-table").DataTable({
+      rowId: "id",
+      ajax: {
+        url: '/copy_paste_software/public/CargaCotizaciones',
+        type: 'GET'
+      },
+
+      columns: [
+        {data : 'id'},
+        {data : 'nombre_cotizacion'},
+        {data : 'fecha_de_cotizacion'},
+        {//acciones
+          data       : null,
+          searchable : false,
+          orderable  : false,
+          render : function(d){
+          var arr = {'id':d.id,'nombre':d.nombre_completo};
+          var btnedit = "";
+          if(d.estatus == 1){
+          var btnedit = "<button class='btn btn-success btn-sm' value='1' href='/copy_paste_software/public/pdf2/"+d.id+"' data-lity> VER PDF</button> ";            
+            var btnactiv = "<button class='btn btn-danger btn-sm' value='1' onclick='desactivarcotizacion("+d.id+")'> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button> ";
+          }else{
+           var btnactiv = " <button class='btn btn-success btn-sm' value='1' onclick='activaruser("+d.id+")'> <span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+          }
+
+
+            return btnedit+btnactiv;
+          }
+        }
+
+
+      ],
+      order: [[ 0, "asc" ]]
+    })
+        }else{
+        refreshTableCotizacion();
+    }   
+});
+
+
+function desactivarcotizacion(id){
+Swal.fire({
+  title: 'Deseas desactivar esta cotizacion?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Desactivar',
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    $.ajax({
+        url     : `/copy_paste_software/public/desactivarcotizacion `,
+        type    : 'POST',
+        data    : {'id':id},
+        success : function(response){
+        Swal.fire(
+            'Excelente',
+            'Usuario Desactivado exitosamente!',
+            'success'
+        );
+
+             refreshTableCotizacion();
+        },
+        error: function(){
+        Swal.fire(
+            'Error',
+            'Ha ocurrido un error revisar!',
+            'error'
+        );
+        }
+    });
+  } 
+})
+
+}
+
+function activarcotizacion(id){
+Swal.fire({
+  title: 'Deseas activar a este usuario?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Activar',
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    $.ajax({
+        url     : `/copy_paste_software/public/activarcotizacion `,
+        type    : 'POST',
+        data    : {'id':id},
+        success : function(response){
+        Swal.fire(
+            'Excelente',
+            'Cotizacion Activado exitosamente!',
+            'success'
+        );
+
+            refreshTableCotizacion();
+        },
+        error: function(){
+        Swal.fire(
+            'Error',
+            'Ha ocurrido un error revisar!',
+            'error'
+        );
+        }
+    });
+  } 
+})
+}
+
+function refreshTableCotizacion(){
+  Tablecotizacion.ajax.reload( null, false );
+}  
+
         $(".codigo").last().focus();
          var l = 1;
             $(document).on('change', '.codigo', function(){  
@@ -438,9 +588,11 @@ $.ajax({
                 });
                 // Abrir el PDF en una nueva ventana o pestaña
                 window.open('/copy_paste_software/public/pdf2/'+datos.id, "_blank");
+                  location.reload();
             }
         });
     },
+    
     error: function () {
         $('form').trigger("reset");
         $("#GuardarUsuario").attr('disabled', false).text("Guardar");

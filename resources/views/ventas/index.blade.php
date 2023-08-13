@@ -372,7 +372,7 @@
 
         var id = "1"
         $.ajax({
-            url     : `/copy_paste_software/public/getproducto `,
+            url     : `/copy_paste_software/public/getproductos `,
             type    : 'POST',
             data    : {'id':id},
             success : function(r){

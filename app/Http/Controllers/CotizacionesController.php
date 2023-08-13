@@ -10,6 +10,7 @@ use App\Models\Vistas;
 use App\Models\cotizacion_producto;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DataTables;
 
 class CotizacionesController extends Controller
 {
@@ -76,4 +77,24 @@ class CotizacionesController extends Controller
         }
         return response()->json($nueva_cotizacion);
     }  
+
+    public function cargacotizaciones(){
+        return DataTables::of(cotizacion::where('estatus',1)->get())->make(true);
+    }
+     public function desactivarcotizacion(Request $request){
+        $id = $request->id;
+        $producto = cotizacion::find($id);
+        $producto->estatus = 2;
+        $producto->save();
+        return true;
+    }
+
+    public function activarcotizacion(Request $request){
+         $id = $request->id;
+        $user = cotizacion::find($id);
+        $user->estatus = 1;
+        $user->save();
+        return true;
+    }
+
 }

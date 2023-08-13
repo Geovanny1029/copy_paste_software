@@ -65,6 +65,8 @@ Route::post('/actualizarproducto/{id}',[App\Http\Controllers\AlmacenController::
 //rutas ventas productos
 Route::post('/getproducto',[App\Http\Controllers\VentasController::class, 'getproducto'])->name('ventas.getproducto');
 
+Route::post('/getproductos',[App\Http\Controllers\VentasController::class, 'getproductos'])->name('ventas.getproductos');
+
 Route::post('/getproducto_select',[App\Http\Controllers\VentasController::class, 'getproducto_select'])->name('ventas.getproducto');
 
 
@@ -75,3 +77,6 @@ Route::post('/registrar_cierre_ventas',[App\Http\Controllers\VentasController::c
 ///REGISTRAR COTIZACIONES
 Route::post('/registro_cotizacion',[App\Http\Controllers\CotizacionesController::class, 'registro_cotizacion'])->name('cotizacion.registro');
 Route::get('/pdf2/{id}',[App\Http\Controllers\CotizacionesController::class, 'pdf'])->name('cotizacion.pdf');
+Route::post('/desactivarcotizacion',[App\Http\Controllers\CotizacionesController::class, 'desactivarcotizacion'])->name('cotizacion.desactivar');
+Route::post('/activarcotizacion',[App\Http\Controllers\CotizacionesController::class, 'activarcotizacion'])->name('cotizacion.activar');
+Route::get('/CargaCotizaciones',[App\Http\Controllers\CotizacionesController::class, 'cargacotizaciones'])->name('cotizacion.carga');

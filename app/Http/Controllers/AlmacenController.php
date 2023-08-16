@@ -2,11 +2,13 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inventario;
+use App\Exports\ProductosExport;
 use App\Models\Venta;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use DataTables;
+use Maatwebsite\Excel\Facades\Excel;
 class AlmacenController extends Controller
 {
     public function index(){
@@ -73,5 +75,9 @@ class AlmacenController extends Controller
         //$user->password = bcrypt($request->password);
         $inventario->save();
             return $inventario;
+    }
+
+    public function ExportarProductos(){
+        return Excel::download(new ProductosExport,'Productos.xlsx');
     }
 }

@@ -30,10 +30,10 @@ Auth::routes();
 
 Route::get('/home  ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
-Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
-Route::get('/ventas',[App\Http\Controllers\VentasController::class, 'index'])->name('ventas.index');
-Route::get('/almacen',[App\Http\Controllers\AlmacenController::class, 'index'])->name('almacen.index');
-Route::get('/cotizaciones',[App\Http\Controllers\CotizacionesController::class, 'index'])->name('cotizaciones.index');
+Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index')->middleware('auth');
+Route::get('/ventas',[App\Http\Controllers\VentasController::class, 'index'])->name('ventas.index')->middleware('auth');
+Route::get('/almacen',[App\Http\Controllers\AlmacenController::class, 'index'])->name('almacen.index')->middleware('auth');
+Route::get('/cotizaciones',[App\Http\Controllers\CotizacionesController::class, 'index'])->name('cotizaciones.index')->middleware('auth');
 
 
 ////rutas modulo usuario
@@ -61,6 +61,8 @@ Route::post('/activaralmacen',[App\Http\Controllers\AlmacenController::class, 'a
 Route::post('/editaralmacen',[App\Http\Controllers\AlmacenController::class, 'editar'])->name('almacen.editar');
 
 Route::post('/actualizarproducto/{id}',[App\Http\Controllers\AlmacenController::class, 'actualizar'])->name('almacen.actualizar');
+
+Route::get('/ExportarProductos',[App\Http\Controllers\AlmacenController::class, 'ExportarProductos'])->name('almacen.ExportProductos');
 
 //rutas ventas productos
 Route::post('/getproducto',[App\Http\Controllers\VentasController::class, 'getproducto'])->name('ventas.getproducto');

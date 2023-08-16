@@ -89,11 +89,18 @@
                         <div class="panel-body">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-2">
                                         <button class="btn btn-primary" id="addproduct">Añadir Producto</button>
                                     </div>
+                                <div class="col-md-2">
+                                        <a class="btn btn-success" id="addproduct" href='/copy_paste_software/public/ExportarProductos'>Descargar Productos ExcelU</a>
+                                    </div>
+                                <div class="col-md-2">
+                                        <button class="btn btn-warning" id="addproduct">importar Productos</button>
+                                    </div>
                                 </div>
-  
+                                  
+                                </div>
                             </div>
                             <br>
                             <div class="container-fluid w-100">

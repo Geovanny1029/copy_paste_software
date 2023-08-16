@@ -11,6 +11,7 @@ use App\Models\Cierre_ventas;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class VentasController extends Controller
 {
     /*
@@ -108,6 +109,7 @@ class VentasController extends Controller
 
         return true;
     }
+
 }
     
 

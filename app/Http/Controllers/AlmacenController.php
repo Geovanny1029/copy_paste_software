@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inventario;
 use App\Exports\ProductosExport;
+use App\Imports\ProductosImport;
 use App\Models\Venta;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Collection;
@@ -79,5 +80,25 @@ class AlmacenController extends Controller
 
     public function ExportarProductos(){
         return Excel::download(new ProductosExport,'Productos.xlsx');
+    }
+
+    public function importProductos(Request $request){
+        $file = $request->file('file');
+        Excel::import(new ProductosImport, $file);
+        return response()->json(array("completo"=>"Guardado"));
+    }
+
+   public function checkBarcodeExists(Request $request)
+    {
+
+        $barcode = $request->Codigo_de_Barras;
+
+        $product = Inventario::where('Codigo_de_Barras', $barcode)->first();
+
+        if ($product) {
+            return response()->json(['exists' => true]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
     }
 }

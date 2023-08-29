@@ -6,6 +6,20 @@ $( "#addproduct" ).on( "click", function() {
  $("#GuardarProducto").on( "click", (e) => {
      e.preventDefault();
      let form  = $("#FormAgregarProducto");
+     var barcode = $("#Codigo_de_Barras").val();
+        $.ajax({
+        url: '/copy_paste_software/public/checkBarcodeExists',
+        type: 'POST',
+        data: {'Codigo_de_Barras' : barcode},
+        success: function(response) {
+          
+            if (response.exists == true) {
+             Swal.fire(
+                 'existe',
+                 'El producto ya existe!',
+                 'error'
+             );
+            } else {
          $.ajax({
              url     : `/copy_paste_software/public/producto/crear `,
              type    : 'POST',
@@ -32,6 +46,17 @@ $( "#addproduct" ).on( "click", function() {
                  $("#modalProductAd").modal('hide');
              }
          });
+            }
+        },
+        error: function() {
+             Swal.fire(
+                 'error',
+                 'Proceso completado correctamente!',
+                 'error'
+             );
+        }
+    });
+
   
  });
  

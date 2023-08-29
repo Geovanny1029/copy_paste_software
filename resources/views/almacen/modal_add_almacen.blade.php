@@ -97,31 +97,33 @@
       <div class="divider"></div>
       <div class="modal-body">
 
-
-<form id="">
-        <input type="hidden" class="form-control" name="tipo"  value="1" ><!-- identificador para la alta -->
-  
-                       
-        <div class="form-group">
-            <label class="col-md-4 control-label">Importar excel de productos</label>
-                <div class="col-md-6">
-                <input type="file" name="file" id="file" />
-            </div>                     
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-6 col-md-offset-4">
-                <button type="submit" id="carga" class="btn btn-primary">
-                    Registrar
-                </button>
+        <div class="row">
+          <form id="carga_layout" enctype='multipart/form-data'>
+            <input type="hidden" class="form-control" name="tipo"  value="1" /><!-- identificador para la alta -->
+      
+                           
+            <div class="form-group">
+                <label class="col-md-4 control-label">Importar excel de productos</label>
+                    <div class="col-md-6">
+                    <input type="file" name="file" id="file" />
+                </div>                     
             </div>
+
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <button type="submit" id="cargar_layoutexcel" class="btn btn-primary">
+                        Registrar
+                    </button>
+                </div>
+            </div>
+          </form>
         </div>
-      </form>>
+
       </div>
       <div class="modal-footer">
         <article id="cargando" style="text-align: center; display: none;">
           <span style="display: inline-block;">Espere un momento por favor no cerrar la ventana</span>
-          <img src="/img/loading.gif" style="display: inline-block; width: 150px;height: 125px;">
+          <img src="/copy_paste_software/public/img/loading.gif" style="display: inline-block; width: 150px;height: 125px;">
         </article> 
         <button type="button" id="cerrarr" class="btn btn-warning" data-dismiss="modal">cerrar</button>
           <!--button type="button" class="btn btn-primary">Save Changes</button-->

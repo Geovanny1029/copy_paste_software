@@ -96,7 +96,7 @@
                                         <a class="btn btn-success" id="addproduct" href='/copy_paste_software/public/ExportarProductos'>Descargar Productos ExcelU</a>
                                     </div>
                                 <div class="col-md-2">
-                                        <button class="btn btn-warning" id="addproduct">importar Productos</button>
+                                        <button class="btn btn-warning" id="addproductexcel">importar Productos</button>
                                     </div>
                                 </div>
                                   
@@ -148,6 +148,15 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="{{ asset('js/login/startmin.js') }}"></script>
+<script>
+    // Initialize Toastr
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        timeOut: 5000
+    };
+</script>
 <script>
 $( document ).ready(function() {
     Tableinventario = $("#almacen-table").DataTable({
@@ -229,6 +238,8 @@ $( document ).ready(function() {
       order: [[ 0, "asc" ]]
     })
 });
+
+
   
 
 function refreshTablealmacen(){
@@ -334,6 +345,55 @@ function editaralmacen(d){
     }); 
 
 }
+
+$("#addproductexcel").click(function () {
+    $("#modalimportarproductosexcel").modal("show");
+});
+
+// llamda al controlador por ajax
+$("#cargar_layoutexcel").click(function (e) {
+    $.ajaxSetup({
+        headers: { "X-CSRF-TOKEN": $('meta[name="_token"]').attr("content") },
+    });
+
+    e.preventDefault();
+
+    $("#cargando").show();
+    $("#cerrarr").hide();
+
+    var formData = new FormData($("#carga_layout")[0]);
+    $.ajax({
+        type: "POST",
+        url: "/copy_paste_software/public/uplayoutproductos",
+        data: formData,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        enctype: "multipart/form-data",
+        success: function (data) {
+            $("#tre").hide();
+            $("#true").show();
+            $("#error").hide();
+            $("#fal").hide();
+            $("#cargando").hide();
+            $("#cerrarr").show();
+            $("#modalimportarproductosexcel").modal("hide");
+            $("#gridSystemModal").modal({ backdrop: "static" });
+             refreshTablealmacen();
+        },
+        error: function (data) {
+            console.log("Error:", data);
+            $("#tre").hide();
+            $("#cerrarr").show();
+            $("#true").hide();
+            $("#error").show();
+            $("#fal").hide();
+            $("#Exx").modal("hide");
+            $("#gridSystemModal").modal({ backdrop: "static" });
+        },
+    });
+});
 </script>
 </body>
 </html>

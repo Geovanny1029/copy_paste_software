@@ -64,6 +64,9 @@ Route::post('/actualizarproducto/{id}',[App\Http\Controllers\AlmacenController::
 
 Route::get('/ExportarProductos',[App\Http\Controllers\AlmacenController::class, 'ExportarProductos'])->name('almacen.ExportProductos');
 
+  Route::post('/uplayoutproductos',[AlmacenController::class, 'importProductos']);
+  Route::post('/checkBarcodeExists', [AlmacenController::class, 'checkBarcodeExists']);
+
 //rutas ventas productos
 Route::post('/getproducto',[App\Http\Controllers\VentasController::class, 'getproducto'])->name('ventas.getproducto');
 

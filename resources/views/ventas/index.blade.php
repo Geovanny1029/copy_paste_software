@@ -289,8 +289,9 @@
                     var palabra = $(this).attr("id");
                     //ultima letra se refiere al numero de la r
                     var ultimaLetra = palabra.charAt(palabra.length - 1);
-                    var cantidad = $(this).val();
-                    var disponibilidad = $("#disponible"+ultimaLetra).val();
+                    var cantidad =parseInt($(this).val());
+                    var disponibilidad = parseInt($("#disponible"+ultimaLetra).val());
+                    console.log(jQuery.type(disponibilidad));
                     if(cantidad < disponibilidad){
                         var precio = $("#precio"+ultimaLetra).val();
                         var total = precio*cantidad;
@@ -300,9 +301,7 @@
                         var suma = 0;
 
                         $(".total_unidad").each(function() {
-                            var valorNumerico = parseFloat($(this).val());
-                            console.log(valorNumerico);
-                            if (!isNaN(valorNumerico)) {
+                            var valorNumerico = parseFloat($(this).val());                            if (!isNaN(valorNumerico)) {
                                 suma += valorNumerico;
                             }
                         });
@@ -325,7 +324,7 @@
 
                         $(".total_unidad").each(function() {
                             var valorNumerico = parseFloat($(this).val());
-                            console.log(valorNumerico);
+                           
                             if (!isNaN(valorNumerico)) {
                                 suma += valorNumerico;
                             }

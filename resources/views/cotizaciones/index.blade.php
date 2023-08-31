@@ -462,9 +462,9 @@ function refreshTableCotizacion(){
         l++
 
         $('#tabla_conceptos').append(
-            '<tr id="row'+l+'" class="agregado">'+
+           '<tr id="row'+l+'" class="agregado">'+
             '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-            '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
+            '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
             '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
             '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
              '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
@@ -473,7 +473,7 @@ function refreshTableCotizacion(){
 
         var id = "1"
         $.ajax({
-            url     : `/copy_paste_software/public/getproducto `,
+            url     : `/copy_paste_software/public/getproductos `,
             type    : 'POST',
             data    : {'id':id},
             success : function(r){

@@ -40,3 +40,10 @@ var l = 3;
       $('#row'+button_idp+'').remove();
 
     });
+
+    document.getElementById("#codigo1").addEventListener('keypress', function(event) {
+    var caracteresPermitidos = '0123456789'; // Agrega aquí los caracteres permitidos
+    var caracter = String.fromCharCode(event.which);
+    if (caracteresPermitidos.indexOf(caracter) < 0)
+        event.preventDefault();
+});

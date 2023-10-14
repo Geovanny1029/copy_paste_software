@@ -115,7 +115,7 @@
                                                             <input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden1">
                                                         </td>
                                                         <td>
-                                                            <input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad1" />
+                                                            <input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad1" min="0" oninput="validity.valid||(value='');">
                                                             <input type="hidden" class="disponibles" name="disponibles" id="disponible1">
                                                         </td>
                                                         <td>
@@ -243,16 +243,7 @@
 
                                 l++
 
-                             $('#tabla_conceptos').append(
-                                    '<tr id="row'+l+'" class="agregado">'+
-                                    '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                                    '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden'+l+'" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
-                                    '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
-                                    '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
-                                    '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
-                                    '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
-                                    '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
-                                    );
+                           
 
                                 var option = "<option value='' disabled selected>Elige una opción</option>";
                                 for(var i = 0; i < productos.length; i++){
@@ -286,17 +277,19 @@
             });
 //suma de cantidad + precio del producto
     $(document).on('change', '.cantidad', function(){
-                    var palabra = $(this).attr("id");
-                    //ultima letra se refiere al numero de la r
-                    var ultimaLetra = palabra.charAt(palabra.length - 1);
-                    var cantidad =parseInt($(this).val());
-                    var disponibilidad = parseInt($("#disponible"+ultimaLetra).val());
+    var palabra = $(this).attr("id");
+    var ultimaLetra = palabra.split('cantidad');
+    // var ultimaLetra = palabra.charAt(palabra.length - 1);
+
+    var cantidad = parseInt($(this).val()) || 0; // Asegurarse de que 'cantidad' sea un número
+    var disponibilidad = parseInt($("#disponible"+ultimaLetra[1]).val()) ;
                     console.log(jQuery.type(disponibilidad));
                     if(cantidad < disponibilidad){
-                        var precio = $("#precio"+ultimaLetra).val();
+
+                        var precio = $("#precio"+ultimaLetra[1]).val();
                         var total = precio*cantidad;
-                        $("#total_unidad"+ultimaLetra).html("<h4>$ "+total+"</h4>");
-                        $("#total_precio_unidad"+ultimaLetra).val(total);
+                        $("#total_unidad"+ultimaLetra[1]).html("<h4>$ "+total+"</h4>");
+                        $("#total_precio_unidad"+ultimaLetra[1]).val(total);
 
                         var suma = 0;
 
@@ -308,17 +301,18 @@
                         $("#totalconceptos").html("<b>Total: $ "+suma+"</b>");
                         $("#totalconceptos_hidden").val(suma);
                     }else{
+                        alert(cantidad+" "+disponibilidad)
                         Swal.fire(
-                            ' unidades disponiles: '+disponibilidad  ,
+                            'unidades disponiles: '+disponibilidad  ,
                             'No existen muchas unidades',
                             'error'
                         );
                          var cantidad_dis = $(this).val(disponibilidad);
-                         var cantidad = $("#cantidad"+ultimaLetra).val();
-                        var precio = $("#precio"+ultimaLetra).val();
+                         var cantidad = $("#cantidad"+ultimaLetra[1]).val();
+                        var precio = $("#precio"+ultimaLetra[1]).val();
                         var total = precio*cantidad;
-                        $("#total_unidad"+ultimaLetra).html("<h4>$ "+total+"</h4>");
-                        $("#total_precio_unidad"+ultimaLetra).val(total);
+                        $("#total_unidad"+ultimaLetra[1]).html("<h4>$ "+total+"</h4>");
+                        $("#total_precio_unidad"+ultimaLetra[1]).val(total);
 
                         var suma = 0;
 
@@ -355,15 +349,34 @@
             } 
 
     });
+$(document).keydown(function(event) {
+    if (event.which == 107) { // "+" en el teclado numérico
+        $("#addc").click();
+    }
+});
 //agregar otro item
     $("#addc").click(function(){
-        l++
+         var campocodigo= $(".codigo").filter(function() {
+     return $(this).val().trim() === ""; // Filtra los campos vacíos
+    });
+  
+
+var campocantidad= $(".cantidad").filter(function() {
+   return $(this).val().trim() === ""; // Filtra los campos vacíos
+ });
+
+
+ if(campocodigo.length>0 || campocantidad.length>0 ){
+     alert("Falta llenar datos revisar");  
+     }else{
+     l++ 
 
         $('#tabla_conceptos').append(
             '<tr id="row'+l+'" class="agregado">'+
             '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
             '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
             '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
+            '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
             '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
              '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
             '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
@@ -391,6 +404,7 @@
             }
         });        
          $(".codigo").last().focus();
+        } 
     });
         
 // listar productos en modal
@@ -541,16 +555,7 @@ $(document).on('change', '.select_producto', function(){
                         $("#select_producto"+l).selectpicker('refresh');
                         l++
 
-                        $('#tabla_conceptos').append(
-                        '<tr id="row'+l+'" class="agregado">'+
-                        '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                        '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
-                        '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
-                        '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
-                        '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
-                        '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
-                        '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
-                        );
+                        
                         var option = "<option value='' disabled selected>Elige una opción</option>";
                         for(var i = 0; i < productos.length; i++){
                             option +="<option value='"+productos[i].id+"'>"+productos[i].producto+"</option>";
@@ -672,6 +677,18 @@ $(document).on('click', '#cierre_dia', function(){
     })
 
 
+});
+$(document).ready(function() {
+    $(document).on("input change paste", "input[id^='codigo']", function() {
+        var newVal = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(newVal);
+    });
+});
+$(document).ready(function() {
+    $(document).on("input change paste", "input[id^='cantidad']", function() {
+        var newVal = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(newVal);
+    });
 });
 
 

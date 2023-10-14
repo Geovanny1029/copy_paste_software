@@ -10,18 +10,12 @@ use App\Models\Venta;
 use App\Models\Cierre_ventas;
 use Illuminate\Support\Facades\Auth;
 
-
-
-class VentasController extends Controller
+class CuentasController extends Controller
 {
-    /*
-     */
-   public function index(){
+    public function index(){
         $productos = Inventario::pluck('id','producto');
-         return view('ventas.index')->with('productos',$productos);
+         return view('cuentas.index')->with('productos',$productos);
     }
-
-
     public function getproducto(Request $request){
           $id = $request->id;
         $producto = Inventario::where('Codigo_de_Barras',$id)->first();
@@ -93,19 +87,6 @@ class VentasController extends Controller
             return false;
         }
     }
-    public function cierre_ventas_general(Request $request)
-    {
-        $fecha_inicio_general = $request->fecha_inicio_general;
-        $fecha_cierre_general = $request->fecha_cierre_general;
-        
-    
-        $registros_venta = Venta::whereBetween('fecha_de_venta', [$fecha_inicio_general, $fecha_cierre_general])->get();
-        if($registros_venta != null ){
-            return response()->json($registros_venta);
-        }else{
-            return false;
-        }
-    }
 
     public function registrar_cierre_ventas(Request $request){
         $fecha = $request->fecha;
@@ -124,6 +105,3 @@ class VentasController extends Controller
     }
 
 }
-    
-
-

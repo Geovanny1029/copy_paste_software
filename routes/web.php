@@ -5,7 +5,8 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CotizacionesController;
+
+use App\Http\Controllers\CuentasController;
 
 
 /*
@@ -34,6 +35,7 @@ Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'
 Route::get('/ventas',[App\Http\Controllers\VentasController::class, 'index'])->name('ventas.index')->middleware('auth');
 Route::get('/almacen',[App\Http\Controllers\AlmacenController::class, 'index'])->name('almacen.index')->middleware('auth');
 Route::get('/cotizaciones',[App\Http\Controllers\CotizacionesController::class, 'index'])->name('cotizaciones.index')->middleware('auth');
+Route::get('/cuentas',[App\Http\Controllers\CuentasController::class, 'index'])->name('cuentas.index')->middleware('auth');
 
 
 ////rutas modulo usuario
@@ -85,3 +87,5 @@ Route::get('/pdf2/{id}',[App\Http\Controllers\CotizacionesController::class, 'pd
 Route::post('/desactivarcotizacion',[App\Http\Controllers\CotizacionesController::class, 'desactivarcotizacion'])->name('cotizacion.desactivar');
 Route::post('/activarcotizacion',[App\Http\Controllers\CotizacionesController::class, 'activarcotizacion'])->name('cotizacion.activar');
 Route::get('/CargaCotizaciones',[App\Http\Controllers\CotizacionesController::class, 'cargacotizaciones'])->name('cotizacion.carga');
+//registrar cuentas
+Route::post('/cierre_ventas_general',[App\Http\Controllers\VentasController::class, 'cierre_ventas_general'])->name('ventas.cierre');

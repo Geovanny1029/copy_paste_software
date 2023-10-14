@@ -214,14 +214,15 @@
 <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script src="{{ asset('js/login/startmin.js') }}"></script>
     <script type="text/javascript">
-let Tablecotizacion = null;        
+let Tablecotizacion = null;  
+
 $("#table_cotizaciones_activas").on( "click", function() {
     if(Tablecotizacion == null){
 
     Tablecotizacion = $("#cotizaciones-table").DataTable({
       rowId: "id",
       ajax: {
-        url: '/copy_paste_software/public/CargaCotizaciones',
+        url:'/copy_paste_software/public/CargaCotizaciones',
         type: 'GET'
       },
 
@@ -268,7 +269,7 @@ Swal.fire({
   /* Read more about isConfirmed, isDenied below */
   if (result.isConfirmed) {
     $.ajax({
-        url     : `/copy_paste_software/public/desactivarcotizacion `,
+        url     : '/copy_paste_software/public/desactivarcotizacion',
         type    : 'POST',
         data    : {'id':id},
         success : function(response){
@@ -360,8 +361,10 @@ function refreshTableCotizacion(){
                                 $("#codigo"+l).val("");
                             }else{
 
-                                $("#select_producto"+l).val(producto.id);
+                                  $("#select_producto"+l).val(producto.id);
+                                $("#select_producto"+l).prop("disabled", true);
                                 $("#select_producto"+l).selectpicker('refresh');
+                                $("#select_producto_hiden"+l).val(producto.id);
                                 $("#cantidad"+l).val(1);
                                 $("#precio"+l).html("<h4>$"+producto.precio+"</h4>");
                                 $("#precio"+l).val(producto.precio    );
@@ -369,19 +372,12 @@ function refreshTableCotizacion(){
                                 $("#total_precio_unidad"+l).val(producto.precio);
                                 $("#disponible"+l).val(producto.cantidad);
                                 $("#id_producto"+l).val(producto.id);
-                                $("#select_producto_hiden"+l).val(producto.id);
+                                $("#codigo"+l).prop("readonly", true);
+                                //////opñjñjñjkljkliñlhlhlh
+
                                 l++
 
-                             $('#tabla_conceptos').append(
-                                    '<tr id="row'+l+'" class="agregado">'+
-                                    '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                                    '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
-                                    '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
-                                    '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
-                                    '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
-                                    '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
-                                    '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
-                                    );
+                             
 
                                 var option = "<option value='' disabled selected>Elige una opción</option>";
                                 for(var i = 0; i < productos.length; i++){
@@ -458,10 +454,29 @@ function refreshTableCotizacion(){
 
     });
     //agregar otro item
-    $("#addcoti").click(function(){
-        l++
+$(document).keydown(function(event) {
+    if (event.which == 107) { // "+" en el teclado numérico
+        $("#addcoti").click();
+    }
+});
 
-        $('#tabla_conceptos').append(
+$("#addcoti").click(function(){
+     
+    var campocodigo= $(".codigo").filter(function() {
+     return $(this).val().trim() === ""; // Filtra los campos vacíos
+    });
+  
+
+var campocantidad= $(".cantidad").filter(function() {
+   return $(this).val().trim() === ""; // Filtra los campos vacíos
+ });
+
+
+ if(campocodigo.length>0 || campocantidad.length>0 ){
+     alert("Falta llenar datos revisar");  
+     }else{
+     l++ 
+     $('#tabla_conceptos').append(
            '<tr id="row'+l+'" class="agregado">'+
             '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
             '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select></td>'+
@@ -469,11 +484,12 @@ function refreshTableCotizacion(){
             '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
              '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
             '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
+        
         );
 
         var id = "1"
         $.ajax({
-            url     : `/copy_paste_software/public/getproductos `,
+            url     : '/copy_paste_software/public/getproductos',
             type    : 'POST',
             data    : {'id':id},
             success : function(r){
@@ -493,7 +509,9 @@ function refreshTableCotizacion(){
             }
         });        
          $(".codigo").last().focus();
-    });
+         }
+});
+
         
 $("#lista_productos" ).on( "click", function() {
         event.preventDefault();
@@ -564,7 +582,7 @@ var campocantidad= $(".cantidad").filter(function() {
 
     let form = $("#formcotizacion");
 $.ajax({
-    url: `/copy_paste_software/public/registro_cotizacion`,
+    url: '/copy_paste_software/public/registro_cotizacion',
     type: 'POST',
     data: form.serialize(),
     beforeSend: function () {
@@ -607,7 +625,7 @@ $.ajax({
 $(document).on('change', '.select_producto', function(){ 
     var valor_select = $(this).val();
         $.ajax({
-            url     : `/copy_paste_software/public/getproducto_select `,
+            url     : '/copy_paste_software/public/getproducto_select',
             type    : 'POST',
             data    : {'id':valor_select},
             success : function(r){
@@ -625,7 +643,7 @@ $(document).on('change', '.select_producto', function(){
                         );
                         $("#codigo"+l).val("");
                     }else{
-                        $("#codigo"+l).val(producto.Codigo_de_Barras);
+                         $("#codigo"+l).val(producto.Codigo_de_Barras);
                         $("#cantidad"+l).val(1);
                         $("#precio"+l).html("<h4>$"+producto.precio+"</h4>");
                         $("#precio"+l).val(producto.precio    );
@@ -633,19 +651,12 @@ $(document).on('change', '.select_producto', function(){
                         $("#total_precio_unidad"+l).val(producto.precio);
                         $("#disponible"+l).val(producto.cantidad);
                         $("#id_producto"+l).val(producto.id);
-                         $("#select_producto_hiden"+l).val(producto.id);
+                        $("#select_producto_hiden"+l).val(producto.id);
+                        $("#codigo"+l).prop("readonly", true);
+                        $("#select_producto"+l).prop('disabled',true);
+                        $("#select_producto"+l).selectpicker('refresh');
                         l++
 
-                        $('#tabla_conceptos').append(
-                        '<tr id="row'+l+'" class="agregado">'+
-                        '<td><input type="text" name="codigo[]" style=" text-transform: uppercase;" placeholder="Codigo" class="form-control codigo" id ="codigo'+l+'" /></td>'+
-                        '<td> <select name="id_producto[]"  class="form-control select_producto" id ="select_producto'+l+'" data-live-search="true"/></select><input type="hidden" class="select_producto_hiden1" name="select_producto_hiden[]" id="select_producto_hiden'+l+'"></td>'+
-                        '<td><input type="number" name="cantidad[]" placeholder="Cantidad" class="form-control cantidad" id ="cantidad'+l+'" /></td>'+
-                        '<input type="hidden" class="disponibles" name="disponibles" id="disponible'+l+'">'+
-                        '<td><input type="number" name="precio[]" placeholder="precio" class="form-control cantidad" id ="precio'+l+'" readonly /></td>'+
-                        '<td><div id="total_unidad'+l+'"></div><input type="hidden" class="total_unidad" name="total_precio_unidad[]" id="total_precio_unidad'+l+'"></td>'+
-                        '<td><button type="button" name="removec" id="'+l+'" value="'+l+'" class="btn btn-danger btn_remove">X</button></td></tr>'
-                        );
                         var option = "<option value='' disabled selected>Elige una opción</option>";
                         for(var i = 0; i < productos.length; i++){
                             option +="<option value='"+productos[i].id+"'>"+productos[i].producto+"</option>";
@@ -684,7 +695,23 @@ $(document).on('change', '.select_producto', function(){
 
 });
 
-    
+$(document).ready(function() {
+    $(document).on("input change paste", "input[id^='codigo']", function() {
+        var newVal = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(newVal);
+    });
+});
+$(document).ready(function() {
+    $(document).on("input change paste", "input[id^='cantidad']", function() {
+        var newVal = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(newVal);
+    });
+});
+
+
+
+
+
 </script>
 </body>
 </html>
